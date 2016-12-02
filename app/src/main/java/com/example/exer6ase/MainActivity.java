@@ -10,6 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.restlet.resource.ClientResource;
+
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -53,11 +57,29 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        if (id == R.id.action_showgrettings) {
+            showGretts();
+            return true;
+        }
+
+            return super.onOptionsItemSelected(item);
     }
 
     public void setAse(){
         TextView t = (TextView)findViewById(R.id.showasename);
         t.setText("Hello ASE!");
+    }
+
+    public void showGretts(){
+        try {
+            String url = "http://ase2016-148507.appspot.com/rest/guestbook/";
+            String rawAnswer = new ClientResource(url).get().getText();
+            TextView t = (TextView)findViewById(R.id.showasename);
+            t.setText(rawAnswer);
+        }
+        catch(IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+        }
+
     }
 }
